@@ -1,0 +1,111 @@
+
+##https://developer.jboss.org/wiki/JBossAS7SecuringPasswords
+
+ 
+$ keytool -genkey -alias <vault> -keyalg RSA -keysize 1024  -keystore <vault.keystore>   
+$ keytool -genkey -alias vault -keyalg RSA -keysize 1024  -keystore vault.keystore  
+Enter keystore password: vault22   
+Re-enter new password:vault22   
+What is your first and last name?  
+  [Unknown]:  Picketbox vault  
+What is the name of your organizational unit?  
+  [Unknown]:  picketbox  
+What is the name of your organization?  
+  [Unknown]:  JBoss  
+What is the name of your City or Locality?  
+  [Unknown]:  chicago  
+What is the name of your State or Province?  
+  [Unknown]:  il  
+What is the two-letter country code for this unit?  
+  [Unknown]:  us  
+Is CN=Picketbox vault, OU=picketbox, O=JBoss, L=chicago, ST=il, C=us correct?  
+  [no]:  yes  
+  
+Enter key password for <vault>  
+        (RETURN if same as keystore password):    
+ 
+ 
+ Starting an interactive session
+Enter directory to store encrypted files (end with either / or \ based on Unix or Windows:C:\workspace\home\vault.keystore
+Enter directory to store encrypted files (end with either / or \ based on Unix or Windows:\workspace\home\vault.keystore
+Enter directory to store encrypted files (end with either / or \ based on Unix or Windows:/workspace/home/vault.keystore
+Enter directory to store encrypted files (end with either / or \ based on Unix or Windows:\workspace\home\
+Enter Keystore URL:\workspace\home\vault.keystore
+Enter Keystore password:
+Enter Keystore password again:
+Values match
+Enter 8 character salt:!1eduarda
+Enter 8 character salt:!1eduarda
+Enter 8 character salt:16041984
+Enter iteration count as a number (Eg: 44):93
+
+Please make note of the following:
+********************************************
+Masked Password:MASK-2QUXmtONnnsx1CTNYtoX1R
+salt:16041984
+Iteration Count:93
+********************************************
+Enter Keystore Alias:vault
+Feb 17, 2015 3:16:29 PM org.jboss.security.vault.SecurityVaultFactory get
+INFO: Getting Security Vault with implementation of org.picketbox.plugins.vault.PicketBoxSecurityVault
+Obtained Vault
+Initializing Vault
+Feb 17, 2015 3:16:29 PM org.picketbox.plugins.vault.PicketBoxSecurityVault init
+INFO: Default Security Vault Implementation Initialized and Ready
+Vault is initialized and ready for use
+Handshake with Vault complete
+Please enter a Digit::   0: Store a password  1: Check whether password exists  2: Exit
+Task:  Store a password
+Please enter attribute value:
+Please enter attribute value again:
+Values match
+Enter Vault Block:mysql_ds
+Enter Attribute Name:
+Enter Attribute Name:
+Enter Attribute Name:password
+Attribute Value for (mysql_ds, password) saved
+
+Please make note of the following:
+********************************************
+Vault Block:mysql_ds
+Attribute Name:password
+Shared Key:ODMxZjMxYWQtYTBlNi00MWZmLTkxOTAtNzIzYjY4MjA0NzQ2TElORV9CUkVBS3ZhdWx0
+Configuration should be done as follows:
+VAULT::mysql_ds::password::ODMxZjMxYWQtYTBlNi00MWZmLTkxOTAtNzIzYjY4MjA0NzQ2TElORV9CUkVBS3ZhdWx0
+********************************************
+
+********************************************
+Vault Block:dsMysqlVault
+Attribute Name:password
+Configuration should be done as follows:
+VAULT::dsMysqlVault::password::1
+********************************************
+
+
+
+attribute value :: "senha" 
+attribute name  :: password
+
+vault.bat --keystore \workspace\home\key\vault.keystore --keystore-password !1eduarda --alias vault --remove-sec-attr --vault-block mysql_ds --attribute password --enc-dir \workspace\home\vault\ --iteration 93 --salt 16041984
+
+vault.bat --keystore \workspace\home\key\vault.keystore --keystore-password !1eduarda --alias vault --check-sec-attr --vault-block mysql_ds --attribute password --enc-dir \workspace\home\vault\ --iteration 93 --salt 16041984
+
+####Non-interactive
+./vault.sh -k vault.keystore -p vault22 -e /home/anil/vault -i 50 -s 12345678 -v vault -b ds_ExampleDS -a password -x sa  
+
+
+On host.xml add :
+
+admin user
+ <secret value="MTIzNDU2" />
+ Application user
+ <secret value="YXBwbGljYXRpb24=" />
+ 
+ 
+ 
+ 
+ <subsystem xmlns="urn:jboss:domain:naming:1.1">
+            <bindings>
+                <lookup name="java:/bv/bv_framework/ejb/GenseqHome" lookup="java:jboss/exported/bvf/bv_com_ejb/GenseqHome!com.broadvision.genseq.ejb.GenseqHome"/>
+             </bindings>
+</subsystem>
