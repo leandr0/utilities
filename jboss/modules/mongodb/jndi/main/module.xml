@@ -1,0 +1,10 @@
+<?xml version="1.0" ?>
+<module xmlns="urn:jboss:module:1.1" name="com.mongodb.jndi">
+    <resources>
+        <resource-root path="mongo-jndi-plugin-1.1.jar"/>
+    </resources>
+    <dependencies>
+        <module name="com.mongodb.driver"/>
+        <module name="javax.api"/>
+    </dependencies>
+</module>
